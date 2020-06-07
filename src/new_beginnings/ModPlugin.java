@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.awt.*;
 
 public class ModPlugin extends BaseModPlugin {
+    public static final String ID = "sun_new_beginnings";
     public static final String SETTINGS_PATH = "NEW_BEGINNINGS_OPTIONS.ini";
 
     static boolean settingsAreRead = false;
@@ -55,7 +56,8 @@ public class ModPlugin extends BaseModPlugin {
         try {
             if(settingsAreRead) return true;
 
-            JSONObject cfg = Global.getSettings().loadJSON(SETTINGS_PATH);
+            JSONObject cfg = Global.getSettings().getMergedJSONForMod(SETTINGS_PATH, ID);
+
             RESPAWN_FLEET_VALUE_MULT = (float) cfg.getDouble("respawnFleetValueMult");
             MAX_RESPAWN_FLEET_VALUE = (float) cfg.getDouble("maxRespawnFleetValue");
             MIN_RESPAWN_FLEET_VALUE = (float) cfg.getDouble("minRespawnFleetValue");
