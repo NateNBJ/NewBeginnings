@@ -2,7 +2,9 @@ package new_beginnings;
 
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.BaseCampaignEventListener;
+import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
@@ -11,14 +13,15 @@ import com.fs.starfarer.api.impl.campaign.fleets.DefaultFleetInflaterParams;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetParamsV3;
 import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
-
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.awt.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class CampaignScript extends BaseCampaignEventListener implements EveryFrameScript {
     static void log(String message) { if(true) Global.getLogger(CampaignScript.class).info(message); }
@@ -191,11 +194,11 @@ public class CampaignScript extends BaseCampaignEventListener implements EveryFr
 
         fleetLosses.val = Math.max(0, fleetLosses.val + startFleetValue.val - endFleetValue);
 
-        log("Fleet value change: " + (endFleetValue - startFleetValue.val));
-        log("Fleet losses since last wipe: " + fleetLosses.val);
-        log("----------");
-
         if(Global.getSettings().isDevMode()) {
+            log("Fleet value change: " + (endFleetValue - startFleetValue.val));
+            log("Fleet losses since last wipe: " + fleetLosses.val);
+            log("----------");
+
             Global.getSector().getCampaignUI().addMessage("Fleet value change: " + (endFleetValue - startFleetValue.val), Color.WHITE);
         }
 
@@ -209,12 +212,12 @@ public class CampaignScript extends BaseCampaignEventListener implements EveryFr
             float shipValue = getShipValue(ship);
             // getBaseValue confirmed in-game to include fitted weapons, but not dMods
             // getPermaMods().size() returned 0 for a hyperion in spite of permanent high-maintenance mod
-            log(ship.getHullId() + " : " + shipValue);
+            if(Global.getSettings().isDevMode()) log(ship.getHullId() + " : " + shipValue);
 
             value += shipValue;
         }
 
-        log("Total fleet value: " + value);
+        if(Global.getSettings().isDevMode()) log("Total fleet value: " + value);
 
         return value;
     }
