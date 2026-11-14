@@ -1,12 +1,13 @@
 {
     "masterVersionFile":"https://raw.githubusercontent.com/NateNBJ/NewBeginnings/master/sun_nb.version",
     "directDownloadURL":"https://github.com/NateNBJ/NewBeginnings/releases/latest/download/New.Beginnings.zip",
+	"changelogURL":"https://raw.githubusercontent.com/NateNBJ/NewBeginnings/refs/heads/master/changelog.txt",
     "modName":"New Beginnings",
     "modThreadId":15280,
     "modVersion":
     {
         "major":1,
-        "minor":5,
+        "minor":6,
         "patch":"0",
     },
 }
