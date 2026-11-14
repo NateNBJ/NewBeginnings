@@ -13,6 +13,7 @@ import com.fs.starfarer.api.impl.campaign.fleets.DefaultFleetInflaterParams;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetParamsV3;
 import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
+import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,15 +51,6 @@ public class CampaignScript extends BaseCampaignEventListener implements EveryFr
 
             if (pf == null) return;
 
-            if (playerJustRespawned) {
-                createNewRespawnFleet();
-                playerJustRespawned = false;
-            }
-
-            if (startFleetValue.val == FLEET_VALUE_NEEDS_REASSESMENT_FLAG) {
-                startFleetValue.val = getFleetValue();
-            }
-
             if (allowedFactions == null
                     && !Global.getSector().isInNewGameAdvance()
                     && !Global.getSector().getCampaignUI().isShowingDialog()
@@ -70,6 +62,15 @@ public class CampaignScript extends BaseCampaignEventListener implements EveryFr
                     ModPlugin.reportCrash(e);
                     allowedFactions = Global.getSettings().loadJSON(ALLOWED_FACTIONS_FILE_PATH, "sun_new_beginnings");
                 }
+            }
+
+            if (playerJustRespawned) {
+                createNewRespawnFleet();
+                playerJustRespawned = false;
+            }
+
+            if (startFleetValue.val == FLEET_VALUE_NEEDS_REASSESMENT_FLAG) {
+                startFleetValue.val = getFleetValue();
             }
         } catch (Exception e) { ModPlugin.reportCrash(e);}
     }
@@ -218,6 +219,22 @@ public class CampaignScript extends BaseCampaignEventListener implements EveryFr
         }
 
         if(Global.getSettings().isDevMode()) log("Total fleet value: " + value);
+
+        return value;
+    }
+
+    public float getFleetBonusXpValue() {
+        float value = 0;
+
+        for(FleetMemberAPI ship : Global.getSector().getPlayerFleet().getFleetData().getMembersListCopy()) {
+            float shipValue = Misc.getBonusXPForScuttling(ship)[0];
+
+            if(Global.getSettings().isDevMode()) log(ship.getHullId() + " : " + shipValue + " xp");
+
+            value += shipValue;
+        }
+
+        if(Global.getSettings().isDevMode()) log("Total fleet bonus xp value: " + value);
 
         return value;
     }
