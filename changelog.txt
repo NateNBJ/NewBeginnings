@@ -1,0 +1,6 @@
+Version 1.6.0
+
+- Updated for Starsector 0.98.5a
+- Fixed an error that would occur when a new game was started with an empty player fleet
+
+Version changes for older updates can be found at https://github.com/NateNBJ/NewBeginnings/releases
